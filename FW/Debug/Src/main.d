@@ -55,7 +55,14 @@ Src/main.o: ../Src/main.c ../Inc/main.h \
  ../STemWinLib/Inc/DIALOG.h ../STemWinLib/Inc/PROGBAR.h \
  ../STemWinLib/Inc/RADIO.h ../STemWinLib/Inc/SLIDER.h \
  ../STemWinLib/Inc/SPINBOX.h ../STemWinLib/Inc/TEXT.h \
- ../STemWinLib/Inc/TREEVIEW.h ../STemWinLib/Inc/KNOB.h
+ ../STemWinLib/Inc/TREEVIEW.h ../STemWinLib/Inc/KNOB.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_api.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_api_strings.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_def.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_device.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_types.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_platform.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_platform_log.h
 
 ../Inc/main.h:
 
@@ -222,3 +229,17 @@ Src/main.o: ../Src/main.c ../Inc/main.h \
 ../STemWinLib/Inc/TREEVIEW.h:
 
 ../STemWinLib/Inc/KNOB.h:
+
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_api.h:
+
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_api_strings.h:
+
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_def.h:
+
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_device.h:
+
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_types.h:
+
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_platform.h:
+
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L0X/vl53l0x_platform_log.h:

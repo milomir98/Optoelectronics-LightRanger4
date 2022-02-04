@@ -35,6 +35,7 @@
 #include <stdio.h>
 
 #include "Windows/WIN1DLG.h"
+#include "vl53l0x_api.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -58,6 +59,7 @@ ADC_HandleTypeDef hadc3;
 DMA_HandleTypeDef hdma_adc3;
 
 I2C_HandleTypeDef hi2c1;
+I2C_HandleTypeDef hi2c2;
 
 RTC_HandleTypeDef hrtc;
 
@@ -92,6 +94,8 @@ int x, y;
 
 char message[5];
 
+VL53L0X_DEV tof_sens;
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -103,6 +107,7 @@ static void MX_ADC3_Init(void);
 static void MX_TIM3_Init(void);
 static void MX_UART8_Init(void);
 static void MX_RTC_Init(void);
+static void MX_I2C2_Init(void);
 /* USER CODE BEGIN PFP */
 void setLedIntensity(uint8_t value);
 int get_time(int type);
@@ -166,6 +171,7 @@ int main(void)
   MX_TIM3_Init();
   MX_UART8_Init();
   MX_RTC_Init();
+  MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
   HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);   //mora da se ukljuci da bi se pokreuo PWM
   HAL_ADC_Start_DMA(&hadc3,ADC_BUF,1);
@@ -174,34 +180,11 @@ int main(void)
   STMPE610_Init();
 
   GUI_Init();
-  //GUI_Clear();
-
-  //WM_SetCreateFlags(WM_CF_MEMDEV);
-  //hWin = CreateWindow();
-
-  //hWin=CreateWindow();
 
 
+  tof_sens->I2cHandle = &hi2c2;
 
-//  GUI_SetPenSize( 10 );
-//  GUI_DrawLine(140, 136, 190, 136);//sat
-//
-//  GUI_SetPenSize( 6 );
-//  GUI_DrawLine(140, 136, 210, 106);//minut
-//
-//  GUI_SetColor(GUI_RED);
-//
-//  GUI_SetPenSize( 4 );
-//  GUI_DrawLine(140, 136, 230, 86);//sekund
-
-
-
-
-
-
-  draw_display();
-
-
+  VL53L0X_DataInit(tof_sens);
 
   /* USER CODE END 2 */
 
@@ -242,19 +225,6 @@ int main(void)
 		//  SSD1963_SetBacklight(SLIDER_GetValue(WM_GetDialogItem(hWin, ID_SLIDER_0 ))*2.55);
 
 
-
-	  //get_temp();
-	 // get_time();
-
-	  //GUI_SetPenSize( 4 );
-	 // GUI_DrawLine(240, 136, 330, 86);
-
-	  //hMem2 = GUI_MEMDEV_Create(0,0,480,272);
-
-	  //GUI_MEMDEV_Select(hMem2);
-	  //GUI_SetBkColor(GUI_WHITE);
-	 // GUI_Clear();
-
 	  hMem2 = GUI_MEMDEV_Create(46,46,180,180);
 	  GUI_MEMDEV_Select(hMem2);
 	  GUI_Clear();
@@ -264,7 +234,7 @@ int main(void)
 	  GUI_DispStringHCenterAt("SEIKO", 136, 80);
 
 	  // ---------- SAT ---------- //
-	  angle = 30 * (get_time(HOURS_TYPE)) + (get_time(MINUTES_TYPE)/2) + (get_time(SECONDS_TYPE)/30);
+	  angle = 0;
 	  angle=(angle/57.29577951) ; //Convert degrees to radians
 	  x_coordinate=(136+(sin(angle)*50));
 	  y_coordinate=(136-(cos(angle)*50));
@@ -275,7 +245,6 @@ int main(void)
 
 
 	  // ---------- MINUT ---------- //
-	  angle = 6 * (get_time(MINUTES_TYPE)) + (get_time(SECONDS_TYPE)/10);
 	  angle=(angle/57.29577951) ; //Convert degrees to radians
 	  x_coordinate=(136+(sin(angle)*80));
 	  y_coordinate=(136-(cos(angle)*80));
@@ -285,7 +254,6 @@ int main(void)
 
 
 	  // ---------- SEKUND ---------- //
-	  angle = 6 * (get_time(SECONDS_TYPE));
 	  angle=(angle/57.29577951) ; //Convert degrees to radians
 	  x_coordinate=(136+(sin(angle)*90));
 	  y_coordinate=(136-(cos(angle)*90));
@@ -354,10 +322,11 @@ void SystemClock_Config(void)
     Error_Handler();
   }
   PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC|RCC_PERIPHCLK_UART8
-                              |RCC_PERIPHCLK_I2C1;
+                              |RCC_PERIPHCLK_I2C1|RCC_PERIPHCLK_I2C2;
   PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
   PeriphClkInitStruct.Uart8ClockSelection = RCC_UART8CLKSOURCE_PCLK1;
   PeriphClkInitStruct.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
+  PeriphClkInitStruct.I2c2ClockSelection = RCC_I2C2CLKSOURCE_PCLK1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
@@ -469,6 +438,52 @@ static void MX_I2C1_Init(void)
 }
 
 /**
+  * @brief I2C2 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_I2C2_Init(void)
+{
+
+  /* USER CODE BEGIN I2C2_Init 0 */
+
+  /* USER CODE END I2C2_Init 0 */
+
+  /* USER CODE BEGIN I2C2_Init 1 */
+
+  /* USER CODE END I2C2_Init 1 */
+  hi2c2.Instance = I2C2;
+  hi2c2.Init.Timing = 0x20303E5D;
+  hi2c2.Init.OwnAddress1 = 0;
+  hi2c2.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
+  hi2c2.Init.DualAddressMode = I2C_DUALADDRESS_DISABLE;
+  hi2c2.Init.OwnAddress2 = 0;
+  hi2c2.Init.OwnAddress2Masks = I2C_OA2_NOMASK;
+  hi2c2.Init.GeneralCallMode = I2C_GENERALCALL_DISABLE;
+  hi2c2.Init.NoStretchMode = I2C_NOSTRETCH_DISABLE;
+  if (HAL_I2C_Init(&hi2c2) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Analogue filter 
+  */
+  if (HAL_I2CEx_ConfigAnalogFilter(&hi2c2, I2C_ANALOGFILTER_ENABLE) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /** Configure Digital filter 
+  */
+  if (HAL_I2CEx_ConfigDigitalFilter(&hi2c2, 0) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN I2C2_Init 2 */
+
+  /* USER CODE END I2C2_Init 2 */
+
+}
+
+/**
   * @brief RTC Initialization Function
   * @param None
   * @retval None
@@ -507,7 +522,7 @@ static void MX_RTC_Init(void)
   /** Initialize RTC and set the Time and Date 
   */
   sTime.Hours = 0x18;
-  sTime.Minutes = 0x10;
+  sTime.Minutes = 0x0;
   sTime.Seconds = 0x0;
   sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
   sTime.StoreOperation = RTC_STOREOPERATION_RESET;
@@ -694,137 +709,7 @@ htim3.Instance ->CCR1 = value;
 
 }
 
-int get_time(int type)
-{
-	char time[10];
 
-	RTC_DateTypeDef gDate;
-	RTC_TimeTypeDef gTime;
-
-	HAL_RTC_GetTime(&hrtc, &gTime, RTC_FORMAT_BIN);
-	HAL_RTC_GetDate(&hrtc, &gDate, RTC_FORMAT_BIN);
-
-	sprintf((char*)time, "%02d:%02d:%02d\r",gTime.Hours, gTime.Minutes, gTime.Seconds);
-
-	EDIT_SetText(WM_GetDialogItem(hWin,ID_EDIT_0), time);
-
-	if(type == HOURS_TYPE)
-		return gTime.Hours;
-	if(type == MINUTES_TYPE)
-		return gTime.Minutes;
-	return gTime.Seconds;
-}
-
-void get_temp(void)
-{
-
-	float temperatura = 0.0;
-	char temperatura_string[10];
-	char temp;
-
-
-	temperatura = (100.0*(((float)temperatura_ADC_sirovo)/(2048.0)-0.5));
-	sprintf( (char *)temperatura_string, "%d \r", (uint16_t)temperatura);
-
-
-	EDIT_SetText(WM_GetDialogItem(hWin,ID_EDIT_1), temperatura_string);
-
-
-
-}
-
-void draw_display(void)
-{
-
-	  hMem = GUI_MEMDEV_Create(0,0,480,272);
-
-	  GUI_MEMDEV_Select(hMem);
-	  GUI_SetBkColor(GUI_WHITE);
-	  GUI_Clear();
-	  GUI_SetColor(GUI_BLACK);
-	  GUI_SetDrawMode(GUI_DRAWMODE_NORMAL);
-	  GUI_SetPenSize( 5 );
-	  GUI_DrawArc(136, 136, 130, 130, -90, 280);
-
-	  GUI_SetPenSize( 8 );
-	  angle = 90;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*120));
-	  y_coordinate=(136-(cos(angle)*120));
-	  GUI_DrawPoint(x_coordinate, y_coordinate); //3
-
-	  angle = 270;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*120));
-	  y_coordinate=(136-(cos(angle)*120));
-	  GUI_DrawPoint(x_coordinate, y_coordinate); //9
-
-	  angle = 0;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*120));
-	  y_coordinate=(136-(cos(angle)*120));
-	  GUI_DrawPoint(x_coordinate, y_coordinate); //12
-
-	  angle = 180;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*120));
-	  y_coordinate=(136-(cos(angle)*120));
-	  GUI_DrawPoint(x_coordinate, y_coordinate); //6
-
-	  GUI_SetPenSize( 6 );
-	  angle = 60;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*120));
-	  y_coordinate=(136-(cos(angle)*120));
-	  GUI_DrawPoint(x_coordinate, y_coordinate); //2
-
-	  angle = 300;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*120));
-	  y_coordinate=(136-(cos(angle)*120));
-	  GUI_DrawPoint(x_coordinate, y_coordinate); //10
-
-	  angle = 120;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*120));
-	  y_coordinate=(136-(cos(angle)*120));
-	  GUI_DrawPoint(x_coordinate, y_coordinate); //4
-
-	  angle = 240;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*120));
-	  y_coordinate=(136-(cos(angle)*120));
-	  GUI_DrawPoint(x_coordinate, y_coordinate); //8
-
-	  angle = 30;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*120));
-	  y_coordinate=(136-(cos(angle)*120));
-	  GUI_DrawPoint(x_coordinate, y_coordinate); //1
-
-	  angle = 150;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*120));
-	  y_coordinate=(136-(cos(angle)*120));
-	  GUI_DrawPoint(x_coordinate, y_coordinate); //5
-
-	  angle = 330;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*120));
-	  y_coordinate=(136-(cos(angle)*120));
-	  GUI_DrawPoint(x_coordinate, y_coordinate); //11
-
-	  angle = 210;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*120));
-	  y_coordinate=(136-(cos(angle)*120));
-	  GUI_DrawPoint(x_coordinate, y_coordinate); //7
-
-
-	  GUI_MEMDEV_CopyToLCD(hMem);
-	  //GUI_MEMDEV_Delete(hMem);
-
-}
 
 /* USER CODE END 4 */
 
