@@ -1,0 +1,7 @@
+LightRanger4_appDLG.c:350:13:_cbWin	40	static
+LightRanger4_appDLG.c:197:13:_cbDialog2	8	static
+LightRanger4_appDLG.c:89:13:_cbDialog1	16	static
+LightRanger4_appDLG.c:384:6:DisplayApp_Init	24	static
+LightRanger4_appDLG.c:401:6:WriteDistance	16	static
+LightRanger4_appDLG.c:410:5:GetTimingBudget_Percentage	8	static
+LightRanger4_appDLG.c:416:5:GetInterMeasPeriod_Percentage	8	static

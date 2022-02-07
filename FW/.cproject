@@ -48,8 +48,8 @@
 									<listOptionValue builtIn="false" value="../Drivers/STM32F7xx_HAL_Driver/Inc"/>
 									<listOptionValue builtIn="false" value="../STemWinLib/Inc"/>
 									<listOptionValue builtIn="false" value="../Drivers/STM32F7xx_HAL_Driver/Inc/Legacy"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LightRanger2/Drivers/VL53L0X}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LightRanger2/Drivers/tof}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LightRanger4/Drivers/VL53L1X/core/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/LightRanger4/Drivers/VL53L1X/platform/inc}&quot;"/>
 								</option>
 								<inputType id="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c.834613491" superClass="com.st.stm32cube.ide.mcu.gnu.managedbuild.tool.c.compiler.input.c"/>
 							</tool>

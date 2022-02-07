@@ -34,8 +34,9 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include "Windows/WIN1DLG.h"
-#include "vl53l0x_api.h"
+//#include "Windows/WIN1DLG.h"
+#include "Windows/LightRanger4_appDLG.h"
+#include "vl53l1_api.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -94,7 +95,10 @@ int x, y;
 
 char message[5];
 
-VL53L0X_DEV tof_sens;
+//VL53L0X_DEV tof_sens;
+
+int dist;
+char dist_chr[15];
 
 /* USER CODE END PV */
 
@@ -179,12 +183,37 @@ int main(void)
   Init_TOUCH_GPIO(hi2c1);
   STMPE610_Init();
 
-  GUI_Init();
+
+  // ******************* ODAVLE MI POCELI ********************* //
+  hWin = DisplayApp_Init();
 
 
-  tof_sens->I2cHandle = &hi2c2;
+  uint8_t buff[50];
+  VL53L1_RangingMeasurementData_t RangingData;
+  VL53L1_Dev_t  vl53l1_c; // center module
+  VL53L1_DEV    Dev = &vl53l1_c;
+
+  Dev->I2cHandle = &hi2c2;
+  Dev->I2cDevAddr = 0x52;
+
+  VL53L1_WaitDeviceBooted( Dev );
+  VL53L1_DataInit( Dev );
+  VL53L1_StaticInit( Dev );
+  VL53L1_SetDistanceMode( Dev, VL53L1_DISTANCEMODE_LONG );
+  VL53L1_SetMeasurementTimingBudgetMicroSeconds( Dev, 50000 );
+  VL53L1_SetInterMeasurementPeriodMilliSeconds( Dev, 500 );
+  VL53L1_StartMeasurement( Dev );
+
+  /*tof_sens->I2cHandle = &hi2c2;
+  tof_sens->I2cDevAddr = 0x52;
 
   VL53L0X_DataInit(tof_sens);
+  VL53L0X_StartMeasurement(tof_sens);
+
+
+  GUI_Clear();
+
+  VL53L0X_RangingMeasurementData_t ranging_data;*/
 
   /* USER CODE END 2 */
 
@@ -196,14 +225,26 @@ int main(void)
 
     /* USER CODE BEGIN 3 */
 
-	 //X_koordinata=STMPE610_GetX_TOUCH();
-	// Y_koordinata=STMPE610_GetY_TOUCH();
+	 X_koordinata=STMPE610_GetX_TOUCH();
+	 Y_koordinata=STMPE610_GetY_TOUCH();
 
-	//  STMPE610_read_xyz();
-	 // GUI_TOUCH_Exec();
-	 // keyPressed=GUI_GetKey();
+	 STMPE610_read_xyz();
+	 GUI_TOUCH_Exec();
+	 keyPressed=GUI_GetKey();
 
-	 // GUI_Delay(1);
+	 GUI_Delay(1);
+
+	 //GUI_SetTextMode(GUI_TM_TRANS);
+	 GUI_SetColor(GUI_BLACK);
+	 GUI_SetFont(&GUI_Font20B_ASCII);
+
+
+	 WriteDistance(GetTimingBudget_Percentage());
+
+
+	 HAL_Delay(50);
+
+	 //if (MULTIPAGE_GetSelection(hWin) == 0)
 
 	 // pin_dioda = 100.00 * ((float)pin_dioda_sirovo)/(4095);
 	 // sprintf((char*)osvetljenost_pin_dioda, "%d\r",(uint16_t)pin_dioda);
@@ -225,46 +266,21 @@ int main(void)
 		//  SSD1963_SetBacklight(SLIDER_GetValue(WM_GetDialogItem(hWin, ID_SLIDER_0 ))*2.55);
 
 
-	  hMem2 = GUI_MEMDEV_Create(46,46,180,180);
-	  GUI_MEMDEV_Select(hMem2);
-	  GUI_Clear();
 
+	  /*VL53L1_WaitMeasurementDataReady( Dev );
+	  VL53L1_GetRangingMeasurementData( Dev, &RangingData );
+
+	  sprintf( (char*)buff, "%d, %d\r", RangingData.RangeStatus, RangingData.RangeMilliMeter);
+
+
+	  GUI_Clear();
+	  GUI_SetColor(GUI_RED);
 	  GUI_SetFont(&GUI_Font24B_ASCII);
 	  GUI_SetTextMode(GUI_TM_TRANS);
-	  GUI_DispStringHCenterAt("SEIKO", 136, 80);
+	  GUI_DispStringHCenterAt(buff, 136, 80);
+	  GUI_DispStringHCenterAt("PROBA", 136, 120);
 
-	  // ---------- SAT ---------- //
-	  angle = 0;
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*50));
-	  y_coordinate=(136-(cos(angle)*50));
-
-	  GUI_SetColor(GUI_BLACK);
-	  GUI_SetPenSize( 10 );
-	  GUI_DrawLine(136, 136, x_coordinate, y_coordinate);//sat
-
-
-	  // ---------- MINUT ---------- //
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*80));
-	  y_coordinate=(136-(cos(angle)*80));
-
-	  GUI_SetPenSize( 6 );
-	  GUI_DrawLine(136, 136, x_coordinate, y_coordinate);//minut
-
-
-	  // ---------- SEKUND ---------- //
-	  angle=(angle/57.29577951) ; //Convert degrees to radians
-	  x_coordinate=(136+(sin(angle)*90));
-	  y_coordinate=(136-(cos(angle)*90));
-
-	  GUI_SetColor(GUI_RED);
-	  GUI_SetPenSize( 4 );
-	  GUI_DrawLine(136, 136, x_coordinate, y_coordinate);//sekund
-
-
-	  GUI_MEMDEV_CopyToLCD(hMem2);
-	  GUI_MEMDEV_Delete(hMem2);
+	  VL53L1_ClearInterruptAndStartMeasurement( Dev );*/
 
   }
   /* USER CODE END 3 */

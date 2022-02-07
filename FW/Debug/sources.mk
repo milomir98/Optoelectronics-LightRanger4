@@ -20,7 +20,8 @@ OBJCOPY_BIN :=
 SUBDIRS := \
 Drivers/STM32F7xx_HAL_Driver/Src \
 Drivers/Sors \
-Drivers/VL53L0X \
+Drivers/VL53L1X/core/src \
+Drivers/VL53L1X/platform/src \
 Src \
 Src/Windows \
 Startup \
