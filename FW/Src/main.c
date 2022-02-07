@@ -53,6 +53,10 @@ extern volatile GUI_TIMER_TIME OS_TimeMS;
 #define HOURS_TYPE 0
 #define MINUTES_TYPE 1
 #define SECONDS_TYPE 2
+
+#define SHORT_DISTANCE_MODE 0
+#define MEDIUM_DISTANCE_MODE 1
+#define LONG_DISTANCE_MODE 2
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -239,10 +243,22 @@ int main(void)
 	 GUI_SetFont(&GUI_Font20B_ASCII);
 
 
-	 WriteDistance(GetTimingBudget_Percentage());
+	 //WriteDistance(GetTimingBudget_Percentage());
 
+	 switch(DistanceMode())
+	 {
+	 case SHORT_DISTANCE_MODE:
+		 WriteDistance(SHORT_DISTANCE_MODE);
+		 break;
+	 case MEDIUM_DISTANCE_MODE:
+		 WriteDistance(MEDIUM_DISTANCE_MODE);
+		 break;
+	 case LONG_DISTANCE_MODE:
+		 WriteDistance(LONG_DISTANCE_MODE);
+		 break;
+	 }
 
-	 HAL_Delay(50);
+	 //HAL_Delay(50);
 
 	 //if (MULTIPAGE_GetSelection(hWin) == 0)
 

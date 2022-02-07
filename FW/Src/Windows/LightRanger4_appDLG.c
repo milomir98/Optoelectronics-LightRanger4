@@ -418,7 +418,39 @@ int GetInterMeasPeriod_Percentage(void) {
 	return SLIDER_GetValue(WM_GetDialogItem(hDialog_sett, ID_SLIDER_1));
 }
 
+bool OK_Button(void);
+bool OK_Button(void) {
 
+	if (BUTTON_IsPressed(WM_GetDialogItem(hDialog_sett, ID_BUTTON_2)) == 0)
+		return false;
+	else
+		return true;
+}
+
+bool START_Button(void);
+bool START_Button(void) {
+
+	if (BUTTON_IsPressed(WM_GetDialogItem(hDialog_app, ID_BUTTON_0)) == 0)
+		return false;
+	else
+		return true;
+}
+
+
+bool STOP_Button(void);
+bool STOP_Button(void) {
+
+	if (BUTTON_IsPressed(WM_GetDialogItem(hDialog_app, ID_BUTTON_1)) == 0)
+		return false;
+	else
+		return true;
+}
+
+int DistanceMode(void);
+int DistanceMode(void) {
+
+	return RADIO_GetValue(WM_GetDialogItem(hDialog_sett, ID_RADIO_0));
+}
 
 
 // USER END
