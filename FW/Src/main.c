@@ -89,6 +89,8 @@ uint32_t ADC_BUF[2], temperatura_ADC_sirovo, pin_dioda_sirovo;
 float angle = 0;
 int x_coordinate = 0;
 int y_coordinate = 0;
+int START = 0;
+
 
 int i=0;
 uint8_t light = 0;
@@ -203,10 +205,11 @@ int main(void)
   VL53L1_WaitDeviceBooted( Dev );
   VL53L1_DataInit( Dev );
   VL53L1_StaticInit( Dev );
-  VL53L1_SetDistanceMode( Dev, VL53L1_DISTANCEMODE_LONG );
-  VL53L1_SetMeasurementTimingBudgetMicroSeconds( Dev, 50000 );
-  VL53L1_SetInterMeasurementPeriodMilliSeconds( Dev, 500 );
-  VL53L1_StartMeasurement( Dev );
+  //VL53L1_SetDistanceMode( Dev, VL53L1_DISTANCEMODE_LONG );
+ // VL53L1_SetMeasurementTimingBudgetMicroSeconds( Dev, 50000 );
+  //VL53L1_SetInterMeasurementPeriodMilliSeconds( Dev, 500 );
+  //VL53L1_StartMeasurement( Dev );
+
 
   /*tof_sens->I2cHandle = &hi2c2;
   tof_sens->I2cDevAddr = 0x52;
@@ -242,9 +245,30 @@ int main(void)
 	 GUI_SetColor(GUI_BLACK);
 	 GUI_SetFont(&GUI_Font20B_ASCII);
 
+	// VL53L1_SetDistanceMode( Dev, VL53L1_DISTANCEMODE_LONG );
+	 //VL53L1_SetMeasurementTimingBudgetMicroSeconds( Dev, 50000 );
+	 //VL53L1_SetInterMeasurementPeriodMilliSeconds( Dev, 500 );
 
-	 //WriteDistance(GetTimingBudget_Percentage());
+	 if (START_Button() == TRUE)
+	 {
+		 START = 1;
+	 }
 
+	 if (STOP_Button() == TRUE)
+	 {
+		 START = 0;
+	 }
+
+     if (START == 1)
+     {
+      VL53L1_StartMeasurement( Dev );
+	  VL53L1_WaitMeasurementDataReady( Dev );
+	  VL53L1_GetRangingMeasurementData( Dev, &RangingData );
+	  WriteDistance(RangingData.RangeMilliMeter);
+     }
+
+
+/*
 	 switch(DistanceMode())
 	 {
 	 case SHORT_DISTANCE_MODE:
@@ -258,6 +282,7 @@ int main(void)
 		 break;
 	 }
 
+*/
 	 //HAL_Delay(50);
 
 	 //if (MULTIPAGE_GetSelection(hWin) == 0)

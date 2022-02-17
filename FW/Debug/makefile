@@ -47,8 +47,8 @@ LightRanger4.bin \
 all: LightRanger4.elf secondary-outputs
 
 # Tool invocations
-LightRanger4.elf: $(OBJS) $(USER_OBJS) C:\Users\EliteBook\Desktop\Fakultet\Optoelektronika\Optoelectronics-LightRanger2\FW\STM32F746ZGTX_FLASH.ld
-	arm-none-eabi-gcc -o "LightRanger4.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\EliteBook\Desktop\Fakultet\Optoelektronika\Optoelectronics-LightRanger2\FW\STM32F746ZGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LightRanger4.map" -Wl,--gc-sections -static -L../STemWinLib/Lib --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
+LightRanger4.elf: $(OBJS) $(USER_OBJS) C:\Users\Vladimir\Desktop\Optoelectronics-LightRanger4\FW\STM32F746ZGTX_FLASH.ld
+	arm-none-eabi-gcc -o "LightRanger4.elf" @"objects.list" $(USER_OBJS) $(LIBS) -mcpu=cortex-m7 -T"C:\Users\Vladimir\Desktop\Optoelectronics-LightRanger4\FW\STM32F746ZGTX_FLASH.ld" --specs=nosys.specs -Wl,-Map="LightRanger4.map" -Wl,--gc-sections -static -L../STemWinLib/Lib --specs=nano.specs -mfpu=fpv5-sp-d16 -mfloat-abi=hard -mthumb -Wl,--start-group -lc -lm -Wl,--end-group
 	@echo 'Finished building target: $@'
 	@echo ' '
 
