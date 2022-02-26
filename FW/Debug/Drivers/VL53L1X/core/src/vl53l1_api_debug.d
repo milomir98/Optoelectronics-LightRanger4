@@ -1,21 +1,21 @@
 Drivers/VL53L1X/core/src/vl53l1_api_debug.o: \
  ../Drivers/VL53L1X/core/src/vl53l1_api_debug.c \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_def.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_device.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_types.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_user_config.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_error_codes.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_register_structs.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_register_map.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_user_defines.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_error_exceptions.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_device.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_register_structs.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_core.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_log.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_ipp_imports.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_user_data.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_def.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_device.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_types.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_user_config.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_error_codes.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_register_structs.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_register_map.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_user_defines.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_error_exceptions.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_device.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_register_structs.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_core.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_log.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_ipp_imports.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_user_data.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h \
  ../Inc/stm32f7xx_hal_conf.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_rcc.h \
@@ -50,42 +50,42 @@ Drivers/VL53L1X/core/src/vl53l1_api_debug.o: \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_tim_ex.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart.h \
  ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_def.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_def.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_core_support.h \
- C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_api_debug.h
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_def.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_def.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_core_support.h \
+ C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_api_debug.h
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_def.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_def.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_device.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_device.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_types.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_types.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_user_config.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_user_config.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_error_codes.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_error_codes.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_register_structs.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_register_structs.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_register_map.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_register_map.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_user_defines.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_user_defines.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_error_exceptions.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_error_exceptions.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_device.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_device.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_register_structs.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_register_structs.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_core.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_core.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_log.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_log.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_ipp_imports.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_ipp_imports.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_user_data.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/platform/inc/vl53l1_platform_user_data.h:
 
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal.h:
 
@@ -155,10 +155,10 @@ C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/platfo
 
 ../Drivers/STM32F7xx_HAL_Driver/Inc/stm32f7xx_hal_uart_ex.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_def.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_def.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_def.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_ll_def.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_core_support.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_core_support.h:
 
-C:/Users/Vladimir/Desktop/Optoelectronics-LightRanger4/FW/Drivers/VL53L1X/core/inc/vl53l1_api_debug.h:
+C:/Users/EliteBook/Desktop/Fakultet/Optoelektronika/Optoelectronics-LightRanger2/FW/Drivers/VL53L1X/core/inc/vl53l1_api_debug.h:

@@ -57,6 +57,12 @@ extern volatile GUI_TIMER_TIME OS_TimeMS;
 #define SHORT_DISTANCE_MODE 0
 #define MEDIUM_DISTANCE_MODE 1
 #define LONG_DISTANCE_MODE 2
+
+#define TB_SHORT_LOW	20
+#define TB_MEDIUM_LOW	33
+#define TB_LONG_LOW 	33
+#define TB_HIGH			999
+#define IMP_HIGH		1004
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
@@ -89,8 +95,6 @@ uint32_t ADC_BUF[2], temperatura_ADC_sirovo, pin_dioda_sirovo;
 float angle = 0;
 int x_coordinate = 0;
 int y_coordinate = 0;
-int START = 0;
-
 
 int i=0;
 uint8_t light = 0;
@@ -100,6 +104,12 @@ float a;
 int x, y;
 
 char message[5];
+
+uint32_t timingBudget = 0;
+uint32_t interMeasurementPeriod = 0;
+int distanceMode = 0;
+
+bool start;
 
 //VL53L0X_DEV tof_sens;
 
@@ -206,10 +216,9 @@ int main(void)
   VL53L1_DataInit( Dev );
   VL53L1_StaticInit( Dev );
   //VL53L1_SetDistanceMode( Dev, VL53L1_DISTANCEMODE_LONG );
- // VL53L1_SetMeasurementTimingBudgetMicroSeconds( Dev, 50000 );
+  //VL53L1_SetMeasurementTimingBudgetMicroSeconds( Dev, 50000 );
   //VL53L1_SetInterMeasurementPeriodMilliSeconds( Dev, 500 );
   //VL53L1_StartMeasurement( Dev );
-
 
   /*tof_sens->I2cHandle = &hi2c2;
   tof_sens->I2cDevAddr = 0x52;
@@ -245,44 +254,59 @@ int main(void)
 	 GUI_SetColor(GUI_BLACK);
 	 GUI_SetFont(&GUI_Font20B_ASCII);
 
-	// VL53L1_SetDistanceMode( Dev, VL53L1_DISTANCEMODE_LONG );
-	 //VL53L1_SetMeasurementTimingBudgetMicroSeconds( Dev, 50000 );
-	 //VL53L1_SetInterMeasurementPeriodMilliSeconds( Dev, 500 );
 
-	 if (START_Button() == TRUE)
+	 //WriteDistance(GetTimingBudget_Percentage());
+
+	 if(OK_Button())
 	 {
-		 START = 1;
+		 start = false;
+		 VL53L1_StopMeasurement(Dev);
+
+		 distanceMode = DistanceMode();
+		 switch(distanceMode)
+		 {
+		 case SHORT_DISTANCE_MODE:
+			 VL53L1_SetDistanceMode( Dev, VL53L1_DISTANCEMODE_SHORT );
+			 timingBudget = ( (TB_HIGH - TB_SHORT_LOW) * ((float)GetTimingBudget_Percentage() / 100) ) + TB_SHORT_LOW;
+			 break;
+		 case MEDIUM_DISTANCE_MODE:
+			 VL53L1_SetDistanceMode( Dev, VL53L1_DISTANCEMODE_MEDIUM );
+			 timingBudget = ( (TB_HIGH - TB_MEDIUM_LOW) * ((float)GetTimingBudget_Percentage() / 100) ) + TB_MEDIUM_LOW;
+			 break;
+		 case LONG_DISTANCE_MODE:
+			 VL53L1_SetDistanceMode( Dev, VL53L1_DISTANCEMODE_LONG );
+			 timingBudget = ( (TB_HIGH - TB_LONG_LOW) * ((float)GetTimingBudget_Percentage() / 100) ) + TB_LONG_LOW;
+			 break;
+		 }
+
+		 interMeasurementPeriod = ( (IMP_HIGH - timingBudget+4) * ((float)GetInterMeasPeriod_Percentage() / 100) ) + timingBudget+4;
+		 timingBudget = timingBudget*1000;
+
+		 VL53L1_SetDistanceMode( Dev, distanceMode );
+		 VL53L1_SetMeasurementTimingBudgetMicroSeconds( Dev, timingBudget );
+		 VL53L1_SetInterMeasurementPeriodMilliSeconds( Dev, interMeasurementPeriod );
 	 }
 
-	 if (STOP_Button() == TRUE)
+	 if(START_Button())
+		 start = true;
+
+	 if(STOP_Button())
+		 start = false;
+
+	 if(start)
 	 {
-		 START = 0;
+		 VL53L1_StartMeasurement( Dev );
+		 VL53L1_WaitMeasurementDataReady( Dev );
+		 VL53L1_GetRangingMeasurementData( Dev, &RangingData );
+		 WriteDistance(RangingData.RangeMilliMeter);
+		 //WriteDistance(interMeasurementPeriod);
+	 }
+	 else
+	 {
+		 VL53L1_StopMeasurement(Dev);
+		 WriteDistance(-1);
 	 }
 
-     if (START == 1)
-     {
-      VL53L1_StartMeasurement( Dev );
-	  VL53L1_WaitMeasurementDataReady( Dev );
-	  VL53L1_GetRangingMeasurementData( Dev, &RangingData );
-	  WriteDistance(RangingData.RangeMilliMeter);
-     }
-
-
-/*
-	 switch(DistanceMode())
-	 {
-	 case SHORT_DISTANCE_MODE:
-		 WriteDistance(SHORT_DISTANCE_MODE);
-		 break;
-	 case MEDIUM_DISTANCE_MODE:
-		 WriteDistance(MEDIUM_DISTANCE_MODE);
-		 break;
-	 case LONG_DISTANCE_MODE:
-		 WriteDistance(LONG_DISTANCE_MODE);
-		 break;
-	 }
-
-*/
 	 //HAL_Delay(50);
 
 	 //if (MULTIPAGE_GetSelection(hWin) == 0)
