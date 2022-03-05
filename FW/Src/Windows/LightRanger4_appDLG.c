@@ -403,8 +403,16 @@ void WriteDistance(int distance)
 {
 	char distance_tmp[5];
 
-	sprintf((char*)distance_tmp, "%d\r",distance);
-	EDIT_SetText(WM_GetDialogItem(hDialog_app,ID_EDIT_0),distance_tmp);
+	if(distance == -1)
+	{
+		sprintf((char*)distance_tmp, "STOP\r");
+		EDIT_SetText(WM_GetDialogItem(hDialog_app,ID_EDIT_0),distance_tmp);
+	}
+	else
+	{
+		sprintf((char*)distance_tmp, "%d\r",distance);
+		EDIT_SetText(WM_GetDialogItem(hDialog_app,ID_EDIT_0),distance_tmp);
+	}
 }
 
 int GetTimingBudget_Percentage(void);

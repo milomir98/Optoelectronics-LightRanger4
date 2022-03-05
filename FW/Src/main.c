@@ -23,7 +23,6 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-//#include "usbd_cdc_if.h"
 #include "SSD1963.h"
 #include "STMPE610.h"
 #include <math.h>
@@ -34,7 +33,6 @@
 #include <stdint.h>
 #include <stdio.h>
 
-//#include "Windows/WIN1DLG.h"
 #include "Windows/LightRanger4_appDLG.h"
 #include "vl53l1_api.h"
 /* USER CODE END Includes */
@@ -50,10 +48,6 @@ extern volatile GUI_TIMER_TIME OS_TimeMS;
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-#define HOURS_TYPE 0
-#define MINUTES_TYPE 1
-#define SECONDS_TYPE 2
-
 #define SHORT_DISTANCE_MODE 0
 #define MEDIUM_DISTANCE_MODE 1
 #define LONG_DISTANCE_MODE 2
@@ -66,73 +60,29 @@ extern volatile GUI_TIMER_TIME OS_TimeMS;
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc3;
-DMA_HandleTypeDef hdma_adc3;
 
 I2C_HandleTypeDef hi2c1;
 I2C_HandleTypeDef hi2c2;
 
-RTC_HandleTypeDef hrtc;
-
-TIM_HandleTypeDef htim3;
-
-UART_HandleTypeDef huart8;
-DMA_HandleTypeDef hdma_uart8_rx;
-DMA_HandleTypeDef hdma_uart8_tx;
-
 /* USER CODE BEGIN PV */
-GUI_MEMDEV_Handle hMem, hMem2;
 uint16_t X_koordinata=0;
 uint16_t Y_koordinata=0;
 uint16_t keyPressed=0;
-float pin_dioda = 0.0;
-char osvetljenost_pin_dioda[20];
-char osvetljenost_ekrana[20];
-uint8_t ekran;
-char alarm[20] = "ALARM!!!!\r";
-char probni[50] = "asdf";
-uint32_t ADC_BUF[2], temperatura_ADC_sirovo, pin_dioda_sirovo;
-float angle = 0;
-int x_coordinate = 0;
-int y_coordinate = 0;
-
-int i=0;
-uint8_t light = 0;
-WM_HWIN hWin;
-
-float a;
-int x, y;
-
-char message[5];
 
 uint32_t timingBudget = 0;
 uint32_t interMeasurementPeriod = 0;
 int distanceMode = 0;
 
 bool start;
-
-//VL53L0X_DEV tof_sens;
-
-int dist;
-char dist_chr[15];
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
-static void MX_DMA_Init(void);
 static void MX_I2C1_Init(void);
-static void MX_ADC3_Init(void);
-static void MX_TIM3_Init(void);
-static void MX_UART8_Init(void);
-static void MX_RTC_Init(void);
 static void MX_I2C2_Init(void);
 /* USER CODE BEGIN PFP */
-void setLedIntensity(uint8_t value);
-int get_time(int type);
-void get_temp(void);
-void draw_display(void);
+
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -141,20 +91,6 @@ void HAL_SYSTICK_Callback(void)
 {
 	OS_TimeMS++;
 }
-
-
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc)  //ova fja se pozove kad se izvrsi jedna konverzija
-{
-	if(hadc->Instance == ADC3)
-	{
-		//CDC_Transmit_FS((uint8_t *)probni,strlen((const char *)probni));
-		pin_dioda_sirovo = ADC_BUF[1];
-		temperatura_ADC_sirovo = ADC_BUF[0];
-	}
-}
-
-
-
 /* USER CODE END 0 */
 
 /**
@@ -185,26 +121,16 @@ int main(void)
 
   /* Initialize all configured peripherals */
   MX_GPIO_Init();
-  MX_DMA_Init();
   MX_I2C1_Init();
-  MX_ADC3_Init();
-  MX_TIM3_Init();
-  MX_UART8_Init();
-  MX_RTC_Init();
   MX_I2C2_Init();
   /* USER CODE BEGIN 2 */
-  HAL_TIM_PWM_Start(&htim3, TIM_CHANNEL_1);   //mora da se ukljuci da bi se pokreuo PWM
-  HAL_ADC_Start_DMA(&hadc3,ADC_BUF,1);
   Init_LCD_GPIO();
   Init_TOUCH_GPIO(hi2c1);
   STMPE610_Init();
 
 
-  // ******************* ODAVLE MI POCELI ********************* //
-  hWin = DisplayApp_Init();
+  DisplayApp_Init();
 
-
-  uint8_t buff[50];
   VL53L1_RangingMeasurementData_t RangingData;
   VL53L1_Dev_t  vl53l1_c; // center module
   VL53L1_DEV    Dev = &vl53l1_c;
@@ -215,21 +141,6 @@ int main(void)
   VL53L1_WaitDeviceBooted( Dev );
   VL53L1_DataInit( Dev );
   VL53L1_StaticInit( Dev );
-  //VL53L1_SetDistanceMode( Dev, VL53L1_DISTANCEMODE_LONG );
-  //VL53L1_SetMeasurementTimingBudgetMicroSeconds( Dev, 50000 );
-  //VL53L1_SetInterMeasurementPeriodMilliSeconds( Dev, 500 );
-  //VL53L1_StartMeasurement( Dev );
-
-  /*tof_sens->I2cHandle = &hi2c2;
-  tof_sens->I2cDevAddr = 0x52;
-
-  VL53L0X_DataInit(tof_sens);
-  VL53L0X_StartMeasurement(tof_sens);
-
-
-  GUI_Clear();
-
-  VL53L0X_RangingMeasurementData_t ranging_data;*/
 
   /* USER CODE END 2 */
 
@@ -240,7 +151,6 @@ int main(void)
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
-
 	 X_koordinata=STMPE610_GetX_TOUCH();
 	 Y_koordinata=STMPE610_GetY_TOUCH();
 
@@ -250,12 +160,8 @@ int main(void)
 
 	 GUI_Delay(1);
 
-	 //GUI_SetTextMode(GUI_TM_TRANS);
 	 GUI_SetColor(GUI_BLACK);
 	 GUI_SetFont(&GUI_Font20B_ASCII);
-
-
-	 //WriteDistance(GetTimingBudget_Percentage());
 
 	 if(OK_Button())
 	 {
@@ -299,53 +205,12 @@ int main(void)
 		 VL53L1_WaitMeasurementDataReady( Dev );
 		 VL53L1_GetRangingMeasurementData( Dev, &RangingData );
 		 WriteDistance(RangingData.RangeMilliMeter);
-		 //WriteDistance(interMeasurementPeriod);
 	 }
 	 else
 	 {
 		 VL53L1_StopMeasurement(Dev);
 		 WriteDistance(-1);
 	 }
-
-	 //HAL_Delay(50);
-
-	 //if (MULTIPAGE_GetSelection(hWin) == 0)
-
-	 // pin_dioda = 100.00 * ((float)pin_dioda_sirovo)/(4095);
-	 // sprintf((char*)osvetljenost_pin_dioda, "%d\r",(uint16_t)pin_dioda);
-	 //EDIT_SetText(WM_GetDialogItem(hWin,ID_EDIT_1),osvetljenost_pin_dioda); // ispis pin diode
-	 // HAL_Delay(50);
-
-	 // if(pin_dioda < 10)
-		// HAL_UART_Transmit_DMA(&huart8, (uint8_t *)osvetljenost_pin_dioda, strlen((const char *)osvetljenost_pin_dioda));
-		  //CDC_Transmit_FS((uint8_t *)osvetljenost_pin_dioda,strlen((const char *)osvetljenost_pin_dioda));
-
-
-	  //ekran = SLIDER_GetValue(WM_GetDialogItem(hWin, ID_SLIDER_0 ));
-	 // sprintf((char*)osvetljenost_ekrana, "%d\r",(uint16_t)ekran);
-	 // EDIT_SetText(WM_GetDialogItem(hWin,ID_EDIT_0),osvetljenost_ekrana);//ispis osvetljenosti ekrana
-
-	 //if(SLIDER_GetValue(WM_GetDialogItem(hWin, ID_SLIDER_0 )) < 10)
-		//  SSD1963_SetBacklight(30);
-	 // else
-		//  SSD1963_SetBacklight(SLIDER_GetValue(WM_GetDialogItem(hWin, ID_SLIDER_0 ))*2.55);
-
-
-
-	  /*VL53L1_WaitMeasurementDataReady( Dev );
-	  VL53L1_GetRangingMeasurementData( Dev, &RangingData );
-
-	  sprintf( (char*)buff, "%d, %d\r", RangingData.RangeStatus, RangingData.RangeMilliMeter);
-
-
-	  GUI_Clear();
-	  GUI_SetColor(GUI_RED);
-	  GUI_SetFont(&GUI_Font24B_ASCII);
-	  GUI_SetTextMode(GUI_TM_TRANS);
-	  GUI_DispStringHCenterAt(buff, 136, 80);
-	  GUI_DispStringHCenterAt("PROBA", 136, 120);
-
-	  VL53L1_ClearInterruptAndStartMeasurement( Dev );*/
 
   }
   /* USER CODE END 3 */
@@ -370,9 +235,8 @@ void SystemClock_Config(void)
   __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
   /** Initializes the CPU, AHB and APB busses clocks 
   */
-  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_LSI|RCC_OSCILLATORTYPE_HSE;
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSE;
   RCC_OscInitStruct.HSEState = RCC_HSE_ON;
-  RCC_OscInitStruct.LSIState = RCC_LSI_ON;
   RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
   RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSE;
   RCC_OscInitStruct.PLL.PLLM = 25;
@@ -402,74 +266,13 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_RTC|RCC_PERIPHCLK_UART8
-                              |RCC_PERIPHCLK_I2C1|RCC_PERIPHCLK_I2C2;
-  PeriphClkInitStruct.RTCClockSelection = RCC_RTCCLKSOURCE_LSI;
-  PeriphClkInitStruct.Uart8ClockSelection = RCC_UART8CLKSOURCE_PCLK1;
+  PeriphClkInitStruct.PeriphClockSelection = RCC_PERIPHCLK_I2C1|RCC_PERIPHCLK_I2C2;
   PeriphClkInitStruct.I2c1ClockSelection = RCC_I2C1CLKSOURCE_PCLK1;
   PeriphClkInitStruct.I2c2ClockSelection = RCC_I2C2CLKSOURCE_PCLK1;
   if (HAL_RCCEx_PeriphCLKConfig(&PeriphClkInitStruct) != HAL_OK)
   {
     Error_Handler();
   }
-}
-
-/**
-  * @brief ADC3 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_ADC3_Init(void)
-{
-
-  /* USER CODE BEGIN ADC3_Init 0 */
-
-  /* USER CODE END ADC3_Init 0 */
-
-  ADC_ChannelConfTypeDef sConfig = {0};
-
-  /* USER CODE BEGIN ADC3_Init 1 */
-
-  /* USER CODE END ADC3_Init 1 */
-  /** Configure the global features of the ADC (Clock, Resolution, Data Alignment and number of conversion) 
-  */
-  hadc3.Instance = ADC3;
-  hadc3.Init.ClockPrescaler = ADC_CLOCK_SYNC_PCLK_DIV4;
-  hadc3.Init.Resolution = ADC_RESOLUTION_12B;
-  hadc3.Init.ScanConvMode = ADC_SCAN_ENABLE;
-  hadc3.Init.ContinuousConvMode = ENABLE;
-  hadc3.Init.DiscontinuousConvMode = DISABLE;
-  hadc3.Init.ExternalTrigConvEdge = ADC_EXTERNALTRIGCONVEDGE_NONE;
-  hadc3.Init.ExternalTrigConv = ADC_SOFTWARE_START;
-  hadc3.Init.DataAlign = ADC_DATAALIGN_RIGHT;
-  hadc3.Init.NbrOfConversion = 2;
-  hadc3.Init.DMAContinuousRequests = ENABLE;
-  hadc3.Init.EOCSelection = ADC_EOC_SEQ_CONV;
-  if (HAL_ADC_Init(&hadc3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
-  */
-  sConfig.Channel = ADC_CHANNEL_6;
-  sConfig.Rank = ADC_REGULAR_RANK_1;
-  sConfig.SamplingTime = ADC_SAMPLETIME_480CYCLES;
-  if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /** Configure for the selected ADC regular channel its corresponding rank in the sequencer and its sample time. 
-  */
-  sConfig.Channel = ADC_CHANNEL_7;
-  sConfig.Rank = ADC_REGULAR_RANK_2;
-  if (HAL_ADC_ConfigChannel(&hadc3, &sConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN ADC3_Init 2 */
-
-  /* USER CODE END ADC3_Init 2 */
-
 }
 
 /**
@@ -565,185 +368,6 @@ static void MX_I2C2_Init(void)
 }
 
 /**
-  * @brief RTC Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_RTC_Init(void)
-{
-
-  /* USER CODE BEGIN RTC_Init 0 */
-
-  /* USER CODE END RTC_Init 0 */
-
-  RTC_TimeTypeDef sTime = {0};
-  RTC_DateTypeDef sDate = {0};
-
-  /* USER CODE BEGIN RTC_Init 1 */
-
-  /* USER CODE END RTC_Init 1 */
-  /** Initialize RTC Only 
-  */
-  hrtc.Instance = RTC;
-  hrtc.Init.HourFormat = RTC_HOURFORMAT_24;
-  hrtc.Init.AsynchPrediv = 127;
-  hrtc.Init.SynchPrediv = 255;
-  hrtc.Init.OutPut = RTC_OUTPUT_DISABLE;
-  hrtc.Init.OutPutPolarity = RTC_OUTPUT_POLARITY_HIGH;
-  hrtc.Init.OutPutType = RTC_OUTPUT_TYPE_OPENDRAIN;
-  if (HAL_RTC_Init(&hrtc) != HAL_OK)
-  {
-    Error_Handler();
-  }
-
-  /* USER CODE BEGIN Check_RTC_BKUP */
-    
-  /* USER CODE END Check_RTC_BKUP */
-
-  /** Initialize RTC and set the Time and Date 
-  */
-  sTime.Hours = 0x18;
-  sTime.Minutes = 0x0;
-  sTime.Seconds = 0x0;
-  sTime.DayLightSaving = RTC_DAYLIGHTSAVING_NONE;
-  sTime.StoreOperation = RTC_STOREOPERATION_RESET;
-  if (HAL_RTC_SetTime(&hrtc, &sTime, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sDate.WeekDay = RTC_WEEKDAY_MONDAY;
-  sDate.Month = RTC_MONTH_JANUARY;
-  sDate.Date = 0x1;
-  sDate.Year = 0x0;
-
-  if (HAL_RTC_SetDate(&hrtc, &sDate, RTC_FORMAT_BCD) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN RTC_Init 2 */
-
-  /* USER CODE END RTC_Init 2 */
-
-}
-
-/**
-  * @brief TIM3 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM3_Init(void)
-{
-
-  /* USER CODE BEGIN TIM3_Init 0 */
-
-  /* USER CODE END TIM3_Init 0 */
-
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-  TIM_OC_InitTypeDef sConfigOC = {0};
-
-  /* USER CODE BEGIN TIM3_Init 1 */
-
-  /* USER CODE END TIM3_Init 1 */
-  htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 25;
-  htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 1920;
-  htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim3, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  if (HAL_TIM_PWM_Init(&htim3) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim3, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sConfigOC.OCMode = TIM_OCMODE_PWM1;
-  sConfigOC.Pulse = 0;
-  sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
-  sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
-  if (HAL_TIM_PWM_ConfigChannel(&htim3, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM3_Init 2 */
-
-  /* USER CODE END TIM3_Init 2 */
-  HAL_TIM_MspPostInit(&htim3);
-
-}
-
-/**
-  * @brief UART8 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_UART8_Init(void)
-{
-
-  /* USER CODE BEGIN UART8_Init 0 */
-
-  /* USER CODE END UART8_Init 0 */
-
-  /* USER CODE BEGIN UART8_Init 1 */
-
-  /* USER CODE END UART8_Init 1 */
-  huart8.Instance = UART8;
-  huart8.Init.BaudRate = 115200;
-  huart8.Init.WordLength = UART_WORDLENGTH_8B;
-  huart8.Init.StopBits = UART_STOPBITS_1;
-  huart8.Init.Parity = UART_PARITY_NONE;
-  huart8.Init.Mode = UART_MODE_TX_RX;
-  huart8.Init.HwFlowCtl = UART_HWCONTROL_NONE;
-  huart8.Init.OverSampling = UART_OVERSAMPLING_16;
-  huart8.Init.OneBitSampling = UART_ONE_BIT_SAMPLE_DISABLE;
-  huart8.AdvancedInit.AdvFeatureInit = UART_ADVFEATURE_NO_INIT;
-  if (HAL_UART_Init(&huart8) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN UART8_Init 2 */
-
-  /* USER CODE END UART8_Init 2 */
-
-}
-
-/** 
-  * Enable DMA controller clock
-  */
-static void MX_DMA_Init(void) 
-{
-
-  /* DMA controller clock enable */
-  __HAL_RCC_DMA2_CLK_ENABLE();
-  __HAL_RCC_DMA1_CLK_ENABLE();
-
-  /* DMA interrupt init */
-  /* DMA1_Stream0_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream0_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);
-  /* DMA1_Stream6_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Stream6_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA1_Stream6_IRQn);
-  /* DMA2_Stream0_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA2_Stream0_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(DMA2_Stream0_IRQn);
-
-}
-
-/**
   * @brief GPIO Initialization Function
   * @param None
   * @retval None
@@ -758,7 +382,6 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
-  __HAL_RCC_GPIOE_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
   HAL_GPIO_WritePin(GPIOG, GPIO_PIN_15, GPIO_PIN_RESET);
@@ -780,15 +403,23 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
+  /*Configure GPIO pin : PB4 */
+  GPIO_InitStruct.Pin = GPIO_PIN_4;
+  GPIO_InitStruct.Mode = GPIO_MODE_AF_PP;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+  GPIO_InitStruct.Alternate = GPIO_AF2_TIM3;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
 }
 
 /* USER CODE BEGIN 4 */
 
-void setLedIntensity(uint8_t value)
+/*void setLedIntensity(uint8_t value)
 {
 htim3.Instance ->CCR1 = value;
 
-}
+}*/
 
 
 

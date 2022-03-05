@@ -3,9 +3,9 @@ LightRanger4_appDLG.c:197:13:_cbDialog2	8	static
 LightRanger4_appDLG.c:89:13:_cbDialog1	16	static
 LightRanger4_appDLG.c:385:6:DisplayApp_Init	24	static
 LightRanger4_appDLG.c:402:6:WriteDistance	16	static
-LightRanger4_appDLG.c:411:5:GetTimingBudget_Percentage	8	static
-LightRanger4_appDLG.c:417:5:GetInterMeasPeriod_Percentage	8	static
-LightRanger4_appDLG.c:423:6:OK_Button	8	static
-LightRanger4_appDLG.c:432:6:START_Button	8	static
-LightRanger4_appDLG.c:442:6:STOP_Button	8	static
-LightRanger4_appDLG.c:451:5:DistanceMode	8	static
+LightRanger4_appDLG.c:419:5:GetTimingBudget_Percentage	8	static
+LightRanger4_appDLG.c:425:5:GetInterMeasPeriod_Percentage	8	static
+LightRanger4_appDLG.c:431:6:OK_Button	8	static
+LightRanger4_appDLG.c:440:6:START_Button	8	static
+LightRanger4_appDLG.c:450:6:STOP_Button	8	static
+LightRanger4_appDLG.c:459:5:DistanceMode	8	static
